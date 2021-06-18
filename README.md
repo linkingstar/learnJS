@@ -18,6 +18,7 @@
 - [webpack 流程](./JavaScript/webpack流程.md)
 - [原型链](./JavaScript/原型链.md)
 - [变量提升](./JavaScript/变量提升.md)
+- [作用域](./JavaScript/作用域.md)
 
 ## 框架
 
