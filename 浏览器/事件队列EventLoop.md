@@ -10,7 +10,7 @@
 
 任务队列是事件机制，IO 设备完成任务之后，将在任务队列中添加一个事件。
 
-任务队列中除开 IO 设备事件之外，还包含用户产生的事件`（鼠标事件，滚动事件）`，只要指定了`回调函数`，时间都会进入到任务队列，等待主线吃读取。
+任务队列中除开 IO 设备事件之外，还包含用户产生的事件`（鼠标事件，滚动事件）`，只要指定了`回调函数`，事件都会进入到任务队列，等待主线程读取。
 
 任务队列是 FIFO 的，主线程读取任务的过程完全自动，排在第一位的任务将最先读取（除开定时器任务）
 
@@ -50,7 +50,7 @@ console.log(3);
 
 ### process.nextTick
 
-`process.nextTick` 方法可以在当前"执行栈"的尾部----下一次 Event Loop（主线程读取"任务队列"）之前----触发回调函数
+`process.nextTick` 方法可以在当前"执行栈"（主线程）的尾部----下一次 Event Loop（主线程读取"任务队列"）之前----触发回调函数
 
 > 指定的任务总是发生在所有异步任务之前
 
@@ -58,6 +58,75 @@ console.log(3);
 
 `setImmediate` 方法则是在当前"任务队列"的尾部添加事件，也就是说，它指定的任务总是在下一次 Event Loop 时执行，这与 `setTimeout(fn, 0)`很像。
 
+在node下运行下面的代码
+```js
+console.log('m1');
+
+process.nextTick(function A() {
+  console.log('t1');
+  process.nextTick(function B() {
+    console.log('t2');
+  });
+});
+
+console.log('m2');
+
+setTimeout(function timeout() {
+  console.log('TIMEOUT FIRED');
+}, 0);
+
+console.log('m3');
+// 输出为 m1 m2 m3 t1 t2 TIMEOUT FIRED
+```
+由此可知nextTick是将任务放入主线程执行栈的最后的，所以会先执行当前执行栈的内容，再执行`nextTick`的内容。
+如果把代码变得更复杂一些
+```js
+console.log('m1');
+
+//tick1
+process.nextTick(function tick1() {
+  console.log('t1');
+  process.nextTick(function tickA() {
+    console.log('t2');
+  });
+});
+
+console.log('m2');
+
+setTimeout(function timeout() {
+  console.log('TIMEOUT FIRED');
+}, 0);
+
+console.log('m3');
+
+setImmediate(function A() {
+  console.log(1);
+  setImmediate(function B() {
+    console.log(2);
+  });
+});
+
+//tick2
+process.nextTick(function tick2() {
+  console.log('t3');
+  process.nextTick(function tickB() {
+    console.log('t4');
+  });
+});
+/**
+m1
+m2
+m3
+t1
+t3
+t2
+t4
+1
+TIMEOUT FIRED
+2
+ * /
+```
+> 当执行代码时，会按照先后顺序把nextTick中的回调函数放入到执行栈的末尾，也就是会依次放入`tick1`跟`tick2`，然后再执行`tick1`跟`tick2`的时候先后放入`tickA`跟`tickB`函数，而`setImmediate`函数跟`setTimeout`是同级别的，我们并不能确定二者执行的先后顺序。
 # [总结](https://juejin.cn/post/6844903471280291854)
 
 JavaScript 主线程拥有一个 **执行栈** 以及一个 **任务队列**，主线程会依次执行代码，当遇到函数时，会先将函数 入栈，函数运行完毕后再将该函数 出栈，直到所有代码执行完毕。  

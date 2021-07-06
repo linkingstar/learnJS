@@ -17,6 +17,7 @@
 - [thunk以及co函数](./JavaScript/thunk以及co函数.md)
 - [webpack 流程](./JavaScript/webpack流程.md)
 - [原型链](./JavaScript/原型链.md)
+- [原型链与构造函数](./JavaScript/原型链与构造函数.md)
 - [变量提升](./JavaScript/变量提升.md)
 - [作用域](./JavaScript/作用域.md)
 
