@@ -1,14 +1,15 @@
 # css 权重
 
 - import!
-- inine style 1000
+- inline style(行内样式) 1000
+  > 注意：写在html style内部的样式叫行内样式，不叫内联样式，内联样式指的是写在`<style> </style>`内部的样式
 
 - #id +100
 - 属性选择器[attr='??'] 、.class、 伪类(:hover,:active) +10
-- 元素选择(类似div,p,h1)，伪元素(:before,:after) +1
+- 元素选择(类似div,p,h1)，伪元素(:before,:after),css运算符 +1
 - 通配符（*）+ 0
 
-行内样式的优先级最高，然后是id选择器
+除开`!import`行内样式的优先级最高，然后是id选择器
 
 ## 样式重复
 

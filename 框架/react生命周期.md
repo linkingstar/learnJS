@@ -2,16 +2,40 @@
 
 > 参考文档：https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromprops
 
-# 挂载阶段
+# 生命周期图例
+
+https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+
+![image-20210710115158267](/Users/eden/workspace/learnJs/image/image-20210710115158267.png)
+
+由上图可知
+
+- mount阶段的流程是
+
+  constructor -> getDerivedStateFromProps -> render -> componentDidMount
+
+- update阶段
+
+  getDerivedStateFromProps -> shouldComponentUpdate -> render -> getSnapshotBeforeUpdate -> componentDidUpdate
+
+- 卸载阶段
+
+  componentWillUnmout
+
+# mount阶段
 
 - 构造函数 constructor()  
   可以再此处初始化 state
 
 - static getDerivedStateFromProps() 静态方法，可以返回初始化的状态
 
+  该方法在render之前调用，无论是mount阶段还是update阶段都会调用
+
 - render()
 
 - UNSAFE_componentWillMount();
+
+  该方法不推荐使用，而且会触发多次
 
 - componentDidMount();  
   适合在该函数中获取数据，可以直接在此处调用`setState()`
@@ -20,8 +44,9 @@
 
 - static getDerivedStateFromProps()
 - UNSAFE_componentWillUpdate() 允许用户控制是否更新
-- UNSAFE_componentWillReceiveProps()
+- UNSAFE_componentWillReceiveProps(nextProps)  
 - shouldComponentUpdate() 允许用户控制是否更新
+  
   > 如果返回 false，则不会触发更新。首次渲染或使用 `forceUpdate()` 时不会调用该方法
 - render()
 - getSnapshotBeforeUpdate() 在此处可以从 DOM 中获取信息，返回的参数将被传入 componentDidUpdate 函数
@@ -124,3 +149,22 @@ Error boundaries 是 React 组件，它会在`其子组件树中的任何位置�
 ```js
 component.forceUpdate(callback);
 ```
+
+
+
+# useEffect与useLayoutEffect差别
+
+useEffect的执行会延迟到浏览器渲染之后，useLayoutEffect的执行时间是在DOM渲染之前，也就是说useLayoutEffect会柱塞浏览器渲染。
+
+## effect 的执行时机
+
+与 `componentDidMount`、`componentDidUpdate` 不同的是，传给 `useEffect` 的函数会在浏览器完成布局与绘制**之后**，在一个延迟事件中被调用。这使得它适用于许多常见的副作用场景，比如设置订阅和事件处理等情况，因为绝大多数操作不应阻塞浏览器对屏幕的更新。
+
+
+
+## `useLayoutEffect`
+
+其函数签名与 `useEffect` 相同，但它会在所有的 **DOM 变更之后**同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染。在浏览器执行绘制之前，`useLayoutEffect` 内部的更新计划将被同步刷新。
+
+> 尽可能使用 `useEffect` 以避免阻塞视觉更新。
+

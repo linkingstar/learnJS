@@ -77,9 +77,11 @@ BFC 主要是用来进行 css layout 的，BFC 是一个最小的布局单元。
 - grid items
 - 多列布局
 - column-span 属性
-  格式化上下文会影响布局，通常我们会创建一个新的 BFC 来进行定位跟清除浮动，而不是去改变布局。创建在元素上的 BFC 拥有以下的特性
-- 可以包含内部的 float
-- 可以排除外部的 float
-- 可以避免 margin 折叠
+
+
+格式化上下文会影响布局，通常我们会创建一个新的 BFC 来进行定位跟清除浮动，而不是去改变布局。创建在元素上的 BFC 拥有以下的特性
+  - 可以包含内部的 float
+  - 可以排除外部的 float
+  - 可以避免 margin 折叠
 
 > [参考文档](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context)

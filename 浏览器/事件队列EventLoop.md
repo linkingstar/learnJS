@@ -1,4 +1,4 @@
-# JavaScript 事件
+#  JavaScript 事件
 
 > JavaScript 是单线程的
 

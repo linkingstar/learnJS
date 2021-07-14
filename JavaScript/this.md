@@ -1,5 +1,3 @@
-
-
 # this
 
 非严格模式下，this 指向 globalThis，严格模式下，未设置 this 的情况下，this 为 undefined
@@ -311,3 +309,30 @@ bird.sayHi(); // Hello from Tweety
 bird.sayBye = car.sayBye;
 bird.sayBye(); // Bye from Ferrari
 ```
+
+# 总结
+- 如果在全局作用域调用函数，非严格模式下this指向`globalThis`或者`window`，严格模式下为`undefined`
+
+- 如果采用obj.fun()的形式调用，this指向obj
+
+- 如果将fun()应用到构造函数`let obj = new fun()`，那么this指向被构造的obj
+
+- 如果使用bind,apply,call等函数调用fun，那么指向传入的obj
+
+- 如果使用箭头函数，this依赖于函数定义的上下文，并且不能被更改
+
+- 如果采用在表达式中调用fun，那么会丢失this绑定(与全局模式类似)，参见以下demo
+
+  ```js
+  let a = {
+    fun:function(){console.log(this.prop)},
+    prop:1,
+  }
+  a.fun();
+  //output 1
+  let fun;
+  (fun = a.fun)()
+  //output undefine
+  ```
+
+  
