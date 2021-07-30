@@ -57,4 +57,4 @@ https://zh-hans.reactjs.org/docs/codebase-overview.html#fiber-reconciler
 
 https://nanyang.io/post/deep-dive-into-react-fiber
 
-https://blog.logrocket.com/deep-dive-into-react-fiber-internals/
+6https://blog.logrocket.com/deep-dive-into-react-fiber-internals/
